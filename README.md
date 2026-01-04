@@ -31,8 +31,20 @@ conda activate genmojo
 # Any version between 2.2 to 2.4 should work, no guarantees for higher versions
 conda install pytorch==2.2.0 torchvision==0.17.0 torchaudio==2.2.0 pytorch-cuda=11.8 -c pytorch -c nvidia
 
+conda install \
+  pytorch==2.4.0 \
+  torchvision==0.19.0 \
+  torchaudio==2.4.0 \
+  pytorch-cuda=12.4 \
+  -c pytorch -c nvidia
+
 # Install torch-geometric
 pip install torch_cluster -f https://data.pyg.org/whl/torch-2.2.0+cu118.html
+
+pip install torch_cluster \
+  -f https://data.pyg.org/whl/torch-2.4.0+cu124.html
+
+  
 pip install torch_geometric
 
 # Install other dependencies

@@ -1,0 +1,61 @@
+python run_bg.py --lite \
+--data_dir ./data/car-shadow/JPEGImages
+--mask_dir ./data/car-shadow/Annotations
+--bg_path ./data/car-shadow/InpaintedBackgrounds/00000.jpg \
+--cam_path ./data/car-shadow/MegaSAM_Outputs/car-shadow_sgd_cvd_hr.npz \
+--save_name car-shadow
+--save_path ./outputs/car-shadow1
+
+
+
+
+python run.py --lite \
+--data_dir ./data/crossing/JPEGImages \
+--mask_dir ./data/crossing/Annotations \
+--save_name crossing
+
+
+python run.py --lite \
+--data_dir ./data/camp/JPEGImages \
+--mask_dir ./data/camp/Annotations \
+--save_name camp
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

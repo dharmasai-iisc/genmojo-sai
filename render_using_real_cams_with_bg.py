@@ -143,7 +143,7 @@ class GUI:
             depth_scale_factor = (self.depth_scale * metric_depth) / rendered_depth
 
             # Scale background depth
-            self.enlarge_factor =  1.85 if "car-shadow" in self.args.save_path else 1.0
+            self.enlarge_factor =  1.85 if "car-shadow" in self.opt.save_path else 1.0
             self.bg_depth_scale_factor = depth_scale_factor * self.enlarge_factor
 
         print(f"Background depth scale factor: {self.bg_depth_scale_factor}")

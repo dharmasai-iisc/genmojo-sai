@@ -1,0 +1,8 @@
+vis
+gaussians0
+gaussians
+diff-gaussian-rasterization-extra
+simple-knn
+*/__pycache__/
+__pycache__
+*.pyc
