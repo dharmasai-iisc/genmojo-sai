@@ -298,27 +298,31 @@ class Renderer:
         if isinstance(specify_obj, (str, int, np.int64)):
             specify_obj = [specify_obj]
         
-        all_gaussians_xyz = []
-        for obj_name in self.gaussians.keys():
-            if specify_obj is not None and obj_name not in specify_obj:
-                continue
-            all_gaussians_xyz.append(self.gaussians[obj_name].get_xyz)
-        all_gaussians_xyz = torch.cat(all_gaussians_xyz)
+        ####
+        # ======================================= deleted by codex=========================================================
+        # all_gaussians_xyz = []
+        # for obj_name in self.gaussians.keys():
+        #     if specify_obj is not None and obj_name not in specify_obj:
+        #         continue
+        #     all_gaussians_xyz.append(self.gaussians[obj_name].get_xyz)
+        # all_gaussians_xyz = torch.cat(all_gaussians_xyz)
 
-        # Create zero tensor. We will use it to make pytorch return gradients of the 2D (screen-space) means
-        screenspace_points = (
-            torch.zeros_like(
-                all_gaussians_xyz,
-                dtype=self.gaussians[0].get_xyz.dtype,
-                requires_grad=True,
-                device="cuda",
-            )
-            + 0
-        )
-        try:
-            screenspace_points.retain_grad()
-        except:
-            pass
+        # # Create zero tensor. We will use it to make pytorch return gradients of the 2D (screen-space) means
+        # screenspace_points = (
+        #     torch.zeros_like(
+        #         all_gaussians_xyz,
+        #         dtype=self.gaussians[0].get_xyz.dtype,
+        #         requires_grad=True,
+        #         device="cuda",
+        #     )
+        #     + 0
+        # )
+        # try:
+        #     screenspace_points.retain_grad()
+        # except:
+        #     pass
+        #====================================================================================================================
+
 
         # Set up rasterization configuration
         tanfovx = math.tan(viewpoint_camera.FoVx * 0.5)
@@ -468,6 +472,24 @@ class Renderer:
             all_extras.append(instance_labels[scales_mask])
 
         means3D_final = torch.cat(all_means3D_final)
+
+        ## ======================================= added by codex=========================================================
+        # Keep means2D shape aligned with rasterized points to avoid invalid grads when filtering.
+        screenspace_points = (
+            torch.zeros_like(
+                means3D_final,
+                dtype=means3D_final.dtype,
+                requires_grad=True,
+                device=means3D_final.device,
+            )
+            + 0
+        )
+        try:
+            screenspace_points.retain_grad()
+        except:
+            pass
+        #====================================================================================================================
+
         means2D = screenspace_points
         shs = torch.cat(all_shs)
         colors_precomp = None if all_colors_precomp[0] is None else torch.cat(colors_precomp)

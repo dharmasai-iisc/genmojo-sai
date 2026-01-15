@@ -435,7 +435,7 @@ def create_camera_parameters_jsons(colmap_params_path, \
 
     # B = A @ A
 
-    gemnojo_c2ws = np.zeros((len(dg_marbles_cam_infos), 4,4))
+    genmojo_c2ws = np.zeros((len(dg_marbles_cam_infos), 4,4))
     fys = []
 
     for dg_image_name in dg_marbles_cam_infos.keys():
@@ -467,22 +467,23 @@ def create_camera_parameters_jsons(colmap_params_path, \
         colmap_c2w[0:3,0:3] = R.T
         colmap_c2w[0:3,3] = position
 
-        # here we have colmap fashion i.e. x-right, y-down, z-forward
+        # here we have colmap convention i.e. x-right, y-down, z-forward
         # but we need x-right, y-forward, z-up
+        # is x: right, y: in, z: up
         world_change_axes = np.array([[1, 0, 0, 0],
                                       [0, 0, 1, 0],
                                       [0, -1, 0, 0],
-                                      [0, 0, 0, 1]])
+                                      [0, 0, 0, 1]]).astype(np.float32)
         
         camera_change_axes = np.array([[1, 0, 0, 0],
                                        [0, -1, 0, 0],
                                        [0, 0, -1, 0],
-                                       [0, 0, 0, 1]])
+                                       [0, 0, 0, 1]]).astype(np.float32)
 
-        gemnojo_c2w = world_change_axes @ colmap_c2w @ camera_change_axes.T
+        genmojo_c2w = world_change_axes @ colmap_c2w @ camera_change_axes
 
         # print("uid, dg_image_name:", dg_marbles_cam_infos[dg_image_name].uid, dg_image_name )
-        gemnojo_c2ws[int(dg_image_name.split('.')[0])-1] = gemnojo_c2w
+        genmojo_c2ws[int(dg_image_name.split('.')[0])-1] = genmojo_c2w
 
         # temp = -1 * dg_marbles_cam_infos[dg_image_name].R.T @ dg_marbles_cam_infos[dg_image_name].T # *(1880*518/196/712)
         # xs.append(temp[0])
@@ -492,7 +493,7 @@ def create_camera_parameters_jsons(colmap_params_path, \
     # print("xs lenght", len(xs))
 
     # save the genmojo_c2ws as npz. it's reading should happen liek this: loaded_poses = np.load(file)['cam_c2w']
-    np.savez_compressed(os.path.join(output_folder,'cam_c2w.npz'), cam_c2w=gemnojo_c2ws)
+    np.savez_compressed(os.path.join(output_folder,'cam_c2w.npz'), cam_c2w=genmojo_c2ws)
 
     # print average fy and fovy
     avg_fy = sum(fys)/len(fys)
