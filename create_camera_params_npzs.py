@@ -436,9 +436,10 @@ def create_camera_parameters_jsons(colmap_params_path, \
     # B = A @ A
 
     gemnojo_c2ws = np.zeros((len(dg_marbles_cam_infos), 4,4))
+    fys = []
 
     for dg_image_name in dg_marbles_cam_infos.keys():
-
+        fys.append(dg_marbles_cam_infos[dg_image_name].focal_length_y)
         # create poses json in dycheck camera format.
         # camera = {
         #     "focal_length":dg_marbles_cam_infos[dg_image_name].focal_length_x,
@@ -492,6 +493,11 @@ def create_camera_parameters_jsons(colmap_params_path, \
 
     # save the genmojo_c2ws as npz. it's reading should happen liek this: loaded_poses = np.load(file)['cam_c2w']
     np.savez_compressed(os.path.join(output_folder,'cam_c2w.npz'), cam_c2w=gemnojo_c2ws)
+
+    # print average fy and fovy
+    avg_fy = sum(fys)/len(fys)
+    avg_fovy = 2*math.atan( (dg_marbles_cam_infos[dg_image_name].height/2) / avg_fy )
+    print(f"Average fy: {avg_fy}, Average fovy: {avg_fovy} radians, {math.degrees(avg_fovy)} degrees")
     
     print(f"Camera parameters npzs created in {os.path.join(output_folder,'cam_c2w.npz')}")
     # plot_the_values(uids, xs, ys, zs)

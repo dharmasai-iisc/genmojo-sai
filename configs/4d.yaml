@@ -3,7 +3,7 @@
 input: 
 input_mask:
 # cam pose path (default to None)
-cam_path: /media/dharma/dharma_folder/sai_folder/genmojo/data/camp/cam_path/cam_c2w.npz
+cam_path: ./data/camp/cam_path/cam_c2w.npz
 # input text prompt (default to None)
 prompt:
 # input mesh for stage 2 (auto-search from stage 1 output path if None)
