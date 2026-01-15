@@ -435,7 +435,7 @@ def create_camera_parameters_jsons(colmap_params_path, \
 
     # B = A @ A
 
-    genmojo_c2ws = np.zeros((len(dg_marbles_cam_infos), 4,4))
+    gemnojo_c2ws = np.zeros((len(dg_marbles_cam_infos), 4,4))
     fys = []
 
     for dg_image_name in dg_marbles_cam_infos.keys():
@@ -467,23 +467,22 @@ def create_camera_parameters_jsons(colmap_params_path, \
         colmap_c2w[0:3,0:3] = R.T
         colmap_c2w[0:3,3] = position
 
-        # here we have colmap convention i.e. x-right, y-down, z-forward
+        # here we have colmap fashion i.e. x-right, y-down, z-forward
         # but we need x-right, y-forward, z-up
-        # is x: right, y: in, z: up
         world_change_axes = np.array([[1, 0, 0, 0],
                                       [0, 0, 1, 0],
                                       [0, -1, 0, 0],
-                                      [0, 0, 0, 1]]).astype(np.float32)
+                                      [0, 0, 0, 1]])
         
         camera_change_axes = np.array([[1, 0, 0, 0],
                                        [0, -1, 0, 0],
                                        [0, 0, -1, 0],
-                                       [0, 0, 0, 1]]).astype(np.float32)
+                                       [0, 0, 0, 1]])
 
-        genmojo_c2w = world_change_axes @ colmap_c2w @ camera_change_axes
+        gemnojo_c2w = world_change_axes @ colmap_c2w @ camera_change_axes.T
 
         # print("uid, dg_image_name:", dg_marbles_cam_infos[dg_image_name].uid, dg_image_name )
-        genmojo_c2ws[int(dg_image_name.split('.')[0])-1] = genmojo_c2w
+        gemnojo_c2ws[int(dg_image_name.split('.')[0])-1] = gemnojo_c2w
 
         # temp = -1 * dg_marbles_cam_infos[dg_image_name].R.T @ dg_marbles_cam_infos[dg_image_name].T # *(1880*518/196/712)
         # xs.append(temp[0])
@@ -493,7 +492,7 @@ def create_camera_parameters_jsons(colmap_params_path, \
     # print("xs lenght", len(xs))
 
     # save the genmojo_c2ws as npz. it's reading should happen liek this: loaded_poses = np.load(file)['cam_c2w']
-    np.savez_compressed(os.path.join(output_folder,'cam_c2w.npz'), cam_c2w=genmojo_c2ws)
+    np.savez_compressed(os.path.join(output_folder,'cam_c2w.npz'), cam_c2w=gemnojo_c2ws)
 
     # print average fy and fovy
     avg_fy = sum(fys)/len(fys)
@@ -578,14 +577,26 @@ def replace_depth_maps(vggt_depths_folder, dgmarbles_depth_folder,  camera_names
 
 
 if __name__ == "__main__":
-    camera_params_path = "/media/dharma/dharma_folder/sai_folder/datasets/dynamic_marbles/experiments/vggt_camp2_masked_10_depth_upscaled/712_1880_multi_cam_opt"
 
-    camera_names_json = "/media/dharma/dharma_folder/sai_folder/datasets/dynamic_marbles/experiments/vggt_camp2_camera_names.json"
+    camera_params_path = "/storage/users/anirban/dharmasai/sai_folder/datasets/vggt_camp2_masked_10_depth_upscaled/712_1880_multi_cam_opt"
 
-    colmap_images_folder = "/media/dharma/dharma_folder/sai_folder/datasets/dynamic_marbles/experiments/vggt_camp2_masked_10_depth_upscaled/712_1880_multi_cam_opt/images_aif"
-    dgmarbles_images_folder = "/media/dharma/dharma_folder/sai_folder/genmojo/data/camp/JPEGImages"
+    camera_names_json = "/storage/users/anirban/dharmasai/sai_folder/datasets/dynamic_marbles/experiments/vggt_camp2_camera_names.json"
 
-    output_folder = "data/camp/cam_path"
+    colmap_images_folder = "/storage/users/anirban/dharmasai/sai_folder/datasets/vggt_camp2_masked_10_depth_upscaled/712_1880_multi_cam_opt/images_aif"
+    dgmarbles_images_folder = "./data/camp/JPEGImages"
+
+    output_folder = "./data/camp/cam_path"
+
+
+    # camera_params_path = "/media/dharma/dharma_folder/sai_folder/datasets/dynamic_marbles/experiments/vggt_camp2_masked_10_depth_upscaled/712_1880_multi_cam_opt"
+
+    # camera_names_json = "/media/dharma/dharma_folder/sai_folder/datasets/dynamic_marbles/experiments/vggt_camp2_camera_names.json"
+
+    # colmap_images_folder = "/media/dharma/dharma_folder/sai_folder/datasets/dynamic_marbles/experiments/vggt_camp2_masked_10_depth_upscaled/712_1880_multi_cam_opt/images_aif"
+    # dgmarbles_images_folder = "/media/dharma/dharma_folder/sai_folder/genmojo/data/camp/JPEGImages"
+
+    # output_folder = "data/camp/cam_path"
+    
     os.makedirs(output_folder, exist_ok=True)
     
     # os.makedirs(os.path.join(output_folder, 'depth'), exist_ok=True)
