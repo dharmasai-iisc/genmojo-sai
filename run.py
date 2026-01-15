@@ -47,3 +47,7 @@ if __name__ == "__main__":
     depth_model = 'depthcrafter'
     command = f'python main_4d.py --config configs/4d.yaml depth_model={depth_model} input={args.data_dir} input_mask={first_frame_masks} outdir={args.out_dir} visdir={args.vis_dir} save_path={args.save_name} iters={train_iters} depth_loss=True obj_num={num_objs-1} batch_size=8 grad_accumulation_step=2 do_guidance_step={do_guidance_step}'
     subprocess.Popen(command, shell=True).wait()
+
+
+
+    

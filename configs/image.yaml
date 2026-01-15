@@ -2,7 +2,7 @@
 # input rgba image path (default to None)
 input: 
 input_mask:
-cam_path: 
+cam_path: /media/dharma/dharma_folder/sai_folder/genmojo/data/camp/cam_path/cam_c2w.npz
 # input text prompt (default to None)
 prompt:
 # input mesh for stage 2 (auto-search from stage 1 output path if None)
@@ -39,6 +39,7 @@ iters_refine: 50
 radius: 2
 # training camera fovy
 fovy: 49.1 # align with zero123 rendering setting (ref: https://github.com/cvlab-columbia/zero123/blob/main/objaverse-rendering/scripts/blender_script.py#L61
+
 # checkpoint to load for stage 1 (should be a ply file)
 load:
 # whether allow geom training in stage 2

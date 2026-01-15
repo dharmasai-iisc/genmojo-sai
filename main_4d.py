@@ -1035,8 +1035,12 @@ class GUI:
             w2c = np.eye(4, dtype=np.float32)
             w2c[:3, :3] = pose[:3, :3].T
             w2c[:3, 3] = -pose[:3, :3].T @ pose[:3, 3]
-            # Loaded pose is x: right, y: in, z: up
-            # We need x: right, y: up, z: out
+
+            # loaded pose ('s camera coordinate system) is x-right, y-up and z-out (-z is viewing direction) (no change here)
+
+            # Loaded pose ('s world coordinate system) is x: right, y: in, z: up
+            # We need x: right, y: up, z: out (-z is viewing direction)
+
             axis_convert = np.array([
                 [1.,  0.,  0.,  0.],
                 [0.,  0.,  1.,  0.],

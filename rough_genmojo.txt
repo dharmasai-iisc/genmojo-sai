@@ -15,10 +15,11 @@ python run.py --lite \
 --save_name crossing
 
 
+conda activate genmojo && \
 python run.py --lite \
 --data_dir ./data/camp/JPEGImages \
 --mask_dir ./data/camp/Annotations \
---save_name camp
+--save_name camp2
 
 
 
