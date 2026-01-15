@@ -988,11 +988,31 @@ class GUI:
                 frames.append(image)
             frames = np.stack(frames) / 255
 
+            print("shape of frames:", frames.shape)
+
+            ## ------- added changes------
+            # DepthCrafter needs dimensions divisible by 64; resize to 704x1856 then upsample depth back
+            target_h, target_w = 704, 1856 # only for camp etc models.
+            orig_h, orig_w = None, None
+
+            frames = []
+            for file in tqdm.tqdm(file_list):
+                image = Image.open(file)
+                if orig_h is None:
+                    orig_w, orig_h = image.size
+                image_resized = image.resize((target_w, target_h), resample=Image.BICUBIC)
+                frames.append(np.array(image_resized))
+            frames = np.stack(frames) / 255
+
+            print("shape of frames after adjustment:", frames.shape)
+            #------------------------------
+
+
             with torch.no_grad():
                 res_pipe = pipe(
                     frames,
-                    height=frames.shape[1],
-                    width=frames.shape[2],
+                    height=target_h, # frames.shape[1],
+                    width=target_w, # frames.shape[2],
                     output_type="np",
                     num_inference_steps=5,
                     guidance_scale=1.0,
@@ -1005,6 +1025,18 @@ class GUI:
             res = res.sum(-1) / res.shape[-1]
             # invert the depth map
             depth_all_frames = 1 / res
+
+            ## ------- added changes------
+            # upsample depth back to the original input resolution
+            depth_all_frames = torch.tensor(depth_all_frames).unsqueeze(1)  # [t,1,h,w]
+            depth_all_frames = torch.nn.functional.interpolate(
+                depth_all_frames,
+                size=(orig_h, orig_w),
+                mode="bicubic",
+                align_corners=False,
+            ).squeeze(1).numpy()
+
+            #-----------------------------
 
             for i, file in enumerate(tqdm.tqdm(file_list)):
                 for obj_name in obj_name_list:

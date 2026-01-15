@@ -23,8 +23,15 @@ Installation
 -----------------
 We recommend using conda to create separate Python environments.
 ```bash
+
+conda remove env --name genmojo --all -y
+
+export TORCH_CUDA_ARCH_LIST="8.0;8.6;8.9;9.0+PTX" && \
+export FORCE_CUDA=1
+
 # Create new conda env
-conda create -n genmojo python=3.8.18
+conda create -n genmojo python=3.8.18 && \
+
 conda activate genmojo
 
 # Install PyTorch
@@ -36,23 +43,23 @@ conda install \
   torchvision==0.19.0 \
   torchaudio==2.4.0 \
   pytorch-cuda=12.4 \
-  -c pytorch -c nvidia
+  -c pytorch -c nvidia && \
 
 # Install torch-geometric
 pip install torch_cluster -f https://data.pyg.org/whl/torch-2.2.0+cu118.html
 
 pip install torch_cluster \
-  -f https://data.pyg.org/whl/torch-2.4.0+cu124.html
+  -f https://data.pyg.org/whl/torch-2.4.0+cu124.html && \
 
   
-pip install torch_geometric
+pip install torch_geometric && \
 
 # Install other dependencies
-pip install -r requirements.txt
+pip install -r requirements.txt && \
 
 # simple-knn and nvdiffrast
-pip install ./simple-knn
-pip install git+https://github.com/NVlabs/nvdiffrast/
+pip install ./simple-knn && \
+pip install --no-build-isolation git+https://github.com/NVlabs/nvdiffrast/ && \
 
 # GMFlow and Gaussian Splatting
 
