@@ -3,7 +3,7 @@
 input: 
 input_mask:
 # cam pose path (default to None)
-cam_path: ./data/camp/cam_path/cam_c2w.npz
+cam_path: ./data/camp/cam_path/camp_droid.npz
 # input text prompt (default to None)
 prompt:
 # input mesh for stage 2 (auto-search from stage 1 output path if None)
@@ -57,7 +57,7 @@ force_cuda_rast: False
 # GUI resolution
 H: 712 #512
 W: 1880 #512
-render_bg: False
+render_bg: True
 visualize_only: False # only visualize, no training
 
 ### Gaussian splatting

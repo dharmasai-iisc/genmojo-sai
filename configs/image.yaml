@@ -2,7 +2,7 @@
 # input rgba image path (default to None)
 input: 
 input_mask:
-cam_path: ./data/camp/cam_path/cam_c2w.npz
+cam_path: ./data/camp/cam_path/camp_droid.npz
 # input text prompt (default to None)
 prompt:
 # input mesh for stage 2 (auto-search from stage 1 output path if None)
@@ -79,4 +79,4 @@ geom_lr: 0.0001
 texture_lr: 0.2
 
 # dino feature
-feature_splatting: True
+feature_splatting: False
