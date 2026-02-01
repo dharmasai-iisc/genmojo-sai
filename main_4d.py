@@ -1068,21 +1068,39 @@ class GUI:
             w2c[:3, :3] = pose[:3, :3].T
             w2c[:3, 3] = -pose[:3, :3].T @ pose[:3, 3]
 
-            # loaded pose ('s camera coordinate system) is x-right, y-up and z-out (-z is viewing direction) (no change here)
+            # Coordinate system conversion
+            # loaded pose ('s camera coordinate system) is openCV : x-right, y-down, z-forward
+            # we need : x-right, y-up and z-out (-z is viewing direction) 
+            # (no change here)
 
             # Loaded pose ('s world coordinate system) is x: right, y: in, z: up
             # We need x: right, y: up, z: out (-z is viewing direction)
+            
+            # old
+            # axis_convert = np.array([
+            #     [1.,  0.,  0.,  0.],
+            #     [0.,  0.,  1.,  0.],
+            #     [0., -1.,  0.,  0.],
+            #     [0.,  0.,  0.,  1.]
+            # ])
 
-            axis_convert = np.array([
+            world_axis_convert = np.array([
                 [1.,  0.,  0.,  0.],
-                [0.,  0.,  1.,  0.],
                 [0., -1.,  0.,  0.],
+                [0.,  0.,  1.,  0.],
+                [0.,  0.,  0.,  1.]
+            ])
+
+            camera_axis_convert = np.array([
+                [1.,  0.,  0.,  0.],
+                [0.,  -1.,  0.,  0.],
+                [0.,  0., -1.,  0.],
                 [0.,  0.,  0.,  1.]
             ])
 
             # Load original camera pose
             loaded_pose = loaded_poses[t]
-            real_cam_pose = (axis_convert @ loaded_pose).astype(np.float32)
+            real_cam_pose = (world_axis_convert @ loaded_pose @ camera_axis_convert).astype(np.float32)
 
             # Flip relative rotation
             if t > 0:

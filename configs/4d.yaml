@@ -40,7 +40,7 @@ iters_refine: 50
 # training camera radius
 radius: 2
 # training camera fovy
-fovy: 14.367830023916271 #49.1 # align with zero123 rendering setting (ref: https://github.com/cvlab-columbia/zero123/blob/main/objaverse-rendering/scripts/blender_script.py#L61
+fovy: 14.367830023916271 # 49.1 # align with zero123 rendering setting (ref: https://github.com/cvlab-columbia/zero123/blob/main/objaverse-rendering/scripts/blender_script.py#L61
 # checkpoint to load for stage 1 (should be a ply file)
 load:
 # whether allow geom training in stage 2
@@ -55,8 +55,8 @@ depth_loss: False
 ### GUI
 force_cuda_rast: False
 # GUI resolution
-H: 712 #512
-W: 1880 #512
+H: 712 # 512
+W: 1880 # 512
 render_bg: True
 visualize_only: False # only visualize, no training
 
